@@ -123,7 +123,7 @@ function submitIfComplete(){
   if (entered.length !== PASS_LEN) return;
   if (entered === FIXED_PASSCODE){
     confettiWaves({waves:3, interval:500});
-    if (song){ song.volume = 0.5; song.play().catch(()=>{}); }
+    // no autoplay — let him click play himself
     document.getElementById("gate").classList.add("hidden");
     letterSec.classList.remove("hidden");
     typeLetter(LETTER);
@@ -132,6 +132,7 @@ function submitIfComplete(){
     resetInput(true);
   }
 }
+
 keypad.addEventListener("click", (e)=>{
   const key = e.target.closest(".key")?.dataset.key;
   if (!key) return;
