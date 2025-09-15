@@ -1,0 +1,128 @@
+:root{
+    --bg:#fff7fb;
+    --ink:#2b2b2b;
+    --muted:#6b6b6b;
+    --accent:#ff6ea9;
+    --accent-2:#7ccaff;
+    --card:#ffffff;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+    --radius:16px;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:var(--font);
+    color:var(--ink);
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  main{width:min(960px, 92vw); padding:24px 0 80px}
+  h1,h2,h3{margin:0 0 .5rem}
+  h1{font-size:2rem}
+  h2{font-size:1.6rem}
+  h3{font-size:1.4rem}
+  p{line-height:1.6}
+  .btn{
+    background:linear-gradient(180deg, var(--accent), #ff4b97);
+    color:white; border:none; padding:.8rem 1.1rem; border-radius:12px;
+    font-weight:700; cursor:pointer; box-shadow:var(--shadow);
+  }
+  .btn-light{background:#f0f4ff; color:#2b2f6f; border:1px solid #d9e4ff}
+  .hidden{display:none}
+  
+  /* ---------- Extra whitespace before section titles ---------- */
+  .gallery h3,
+  .reasons h3,
+  .outro h3{
+    margin-top:40px;   /* adjust 30–50px if you want more/less */
+    margin-bottom:16px;
+  }
+  .letter h2{
+    margin-bottom:24px; /* space under "Dear Birthday Boy," */
+  }
+  
+  /* Passcode */
+  .passcode{padding:34px 28px; max-width:420px; text-align:center;}
+  .passcode .lock{font-size:2rem; margin-bottom:.4rem}
+  .dots{display:flex; gap:12px; justify-content:center; margin:14px 0 18px}
+  .dots span{width:14px; height:14px; border-radius:50%; border:2px solid #d8d8d8;}
+  .dots span.filled{background:#111; border-color:#111}
+  .keypad{display:grid; grid-template-columns:repeat(3, 84px); gap:12px; justify-content:center;}
+  .key{height:84px; border-radius:999px; border:1px solid #e7e7e7;
+    background:linear-gradient(180deg, #fff, #f6f6f6); font-size:1.25rem; font-weight:700;}
+  .key.action{font-size:1rem; background:#f4f6ff; border-color:#e1e6ff}
+  .passcode.shake{animation:shake .35s}
+  @keyframes shake{25%{transform:translateX(-6px)} 50%{transform:translateX(6px)} 75%{transform:translateX(-4px)}}
+  
+  /* Letter */
+  .letter .typed{
+    margin-top:12px; background:var(--card); border-radius:var(--radius);
+    padding:22px; box-shadow:var(--shadow); min-height:140px; white-space:pre-wrap;
+  }
+  .controls{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+  
+  /* Gallery */
+  .gallery .carousel{position:relative; display:grid; place-items:center;}
+  .gallery img{width:100%; max-height:64vh; object-fit:cover; border-radius:12px;}
+  .nav{position:absolute; top:50%; transform:translateY(-50%); background:white; border:none; font-size:28px; border-radius:50%; width:44px; height:44px;}
+  .caption{color:var(--muted); margin:.6rem 0 0}
+  
+  /* Reasons (auto-grow cards) */
+  .reasons .grid{
+    display:grid;
+    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    align-items:start;
+  }
+  .card{perspective:1000px;}
+  .flip{
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .6s;
+    /* height is set dynamically in JS */
+  }
+  .face{
+    position:absolute; inset:0;
+    padding:18px;
+    border-radius:14px; background:var(--card);
+    box-shadow:var(--shadow);
+    backface-visibility:hidden;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+  }
+  .back{ transform:rotateY(180deg); }
+  .card:hover .flip{ transform:rotateY(180deg); }
+  
+  /* Modal */
+  dialog{border:none; border-radius:16px; padding:20px 22px; box-shadow:var(--shadow); max-width:min(640px,92vw);}
+  dialog::backdrop{background:rgba(0,0,0,.35)}
+  .modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:14px}
+  
+  /* Make riddle keep line breaks even if JS changes */
+  #secretText{ white-space:pre-line; line-height:1.6; }
+  
+  #confetti{position:fixed; inset:0; pointer-events:none}
+  footer{margin-top:24px; color:var(--muted)}
+
+  /* Audio gift section */
+.audio-section{
+    margin-top:40px;
+    text-align:center;
+  }
+  .audio-section h3{
+    margin-bottom:8px;
+  }
+  .audio-section .sub{
+    color:var(--muted);
+    margin-bottom:16px;
+  }
+  .audio-section audio{
+    width:100%;
+    max-width:400px;
+  }
+  
+  
+  

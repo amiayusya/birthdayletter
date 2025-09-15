@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday 💖</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <main>
+    <!-- Passcode gate -->
+    <section class="gate" id="gate" aria-label="Enter passcode">
+      <div class="gate-card passcode">
+        <div class="lock">🔒</div>
+        <h1>Enter Passcode</h1>
+        <p class="sub">Hint: the day we first met</p>
+
+        <div class="dots" id="dots" aria-label="Passcode dots" role="group" aria-live="polite">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="keypad" role="group" aria-label="Numeric keypad">
+          <button class="key" data-key="1">1</button>
+          <button class="key" data-key="2">2</button>
+          <button class="key" data-key="3">3</button>
+
+          <button class="key" data-key="4">4</button>
+          <button class="key" data-key="5">5</button>
+          <button class="key" data-key="6">6</button>
+
+          <button class="key" data-key="7">7</button>
+          <button class="key" data-key="8">8</button>
+          <button class="key" data-key="9">9</button>
+
+          <button class="key action" data-key="clear">Clear</button>
+          <button class="key" data-key="0">0</button>
+          <button class="key action" data-key="del" aria-label="Delete">⌫</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Letter -->
+    <section class="letter hidden" id="letter">
+      <h2>Hey Birthday Boy &lt;3,</h2>
+      <div id="typed" class="typed"></div>
+      <div class="controls">
+        <button id="skipBtn" class="btn btn-light">Skip typing</button>
+        <button id="replayBtn" class="btn btn-light">Replay</button>
+      </div>
+    </section>
+
+    <!-- Photos -->
+    <section class="gallery hidden" id="gallery">
+      <h3>Some of my favorite moments with you</h3>
+      <div class="carousel">
+        <button class="nav prev" id="prevBtn">‹</button>
+        <img id="carouselImg" src="assets/photo1.jpg" alt="Photo memory" />
+        <button class="nav next" id="nextBtn">›</button>
+      </div>
+      <p id="caption" class="caption"></p>
+    </section>
+
+    <!-- Reasons -->
+    <section class="reasons hidden" id="reasons">
+      <h3>10 Reasons I Adore You</h3>
+      <div class="grid" id="reasonGrid"></div>
+    </section>
+
+    <!-- Outro -->
+    <section class="outro hidden" id="outro">
+      <h3>Birthday Riddle</h3>
+      <button id="secretBtn" class="btn">Tap for a surprise</button>
+    </section>
+
+    <!-- Audio gift (new) -->
+    <section class="audio-section hidden" id="audioSection">
+      <h3>Your Cheeky Smile in a Tune</h3>
+      <p class="sub">Press play, birthday boy — and don’t get too cocky, it’s just kinda you.</p>
+      <audio id="song" controls src="assets/if-cover.mp3"></audio>
+    </section>
+  </main>
+
+  <!-- Secret modal -->
+  <dialog id="secretModal">
+    <form method="dialog">
+      <h3>Surprise 🎁</h3>
+      <p id="secretText"></p>
+      <div class="modal-actions">
+        <button class="btn">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    <small>Made with ♥ by Ami</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
