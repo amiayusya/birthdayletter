@@ -50,19 +50,19 @@ const letterSec = document.getElementById("letter");
 const gallerySec = document.getElementById("gallery");
 const reasonsSec = document.getElementById("reasons");
 const outroSec = document.getElementById("outro");
+const audioSection = document.getElementById("audioSection");
 const typedEl = document.getElementById("typed");
 const skipBtn = document.getElementById("skipBtn");
 const replayBtn = document.getElementById("replayBtn");
-const audioSection = document.getElementById("audioSection");
-const song = document.getElementById("song");
+const song = document.getElementById("song"); // no autoplay!
 const secretBtn = document.getElementById("secretBtn");
 const secretModal = document.getElementById("secretModal");
-document.getElementById("secretText").innerText = SECRET_MESSAGE; // keep line breaks
+document.getElementById("secretText").innerText = SECRET_MESSAGE;
 
 const PASS_LEN = FIXED_PASSCODE.length;
 let entered = "";
 
-/* ==== Confetti (with waves) ==== */
+/* ==== Confetti ==== */
 const confettiCanvas = document.getElementById("confetti");
 const ctx = confettiCanvas.getContext("2d");
 let particles = [];
@@ -71,13 +71,9 @@ addEventListener("resize", resizeCanvas); resizeCanvas();
 
 function makeConfettiBurst(x = innerWidth/2, y = innerHeight/3, opts = {}){
   const {
-    count = 160,
-    spread = 6,
-    baseVy = -10,
-    gravity = 0.18,
+    count = 160, spread = 6, baseVy = -10, gravity = 0.18,
     palette = ["#ff6ea9","#7ccaff","#ffd166","#95d5b2","#cdb4db"],
-    sizeMin = 3,
-    sizeMax = 9
+    sizeMin = 3, sizeMax = 9
   } = opts;
   for (let i = 0; i < count; i++){
     particles.push({
@@ -86,8 +82,7 @@ function makeConfettiBurst(x = innerWidth/2, y = innerHeight/3, opts = {}){
       vy: Math.random()*spread + baseVy,
       size: Math.random()*(sizeMax-sizeMin) + sizeMin,
       color: palette[(Math.random()*palette.length)|0],
-      life: 0,
-      g: gravity
+      life: 0, g: gravity
     });
   }
   if (particles.length > 4000) particles = particles.slice(-4000);
@@ -123,7 +118,7 @@ function submitIfComplete(){
   if (entered.length !== PASS_LEN) return;
   if (entered === FIXED_PASSCODE){
     confettiWaves({waves:3, interval:500});
-    // no autoplay — let him click play himself
+    // no autoplay — only reveal
     document.getElementById("gate").classList.add("hidden");
     letterSec.classList.remove("hidden");
     typeLetter(LETTER);
@@ -132,7 +127,6 @@ function submitIfComplete(){
     resetInput(true);
   }
 }
-
 keypad.addEventListener("click", (e)=>{
   const key = e.target.closest(".key")?.dataset.key;
   if (!key) return;
@@ -172,7 +166,7 @@ function revealByProgress(pct){
   }
   if (pct >= 1 && audioSection.classList.contains("hidden")){
     audioSection.classList.remove("hidden");
-  }  
+  }
 }
 
 /* ==== Letter typing ==== */
@@ -182,34 +176,31 @@ function typeLetter(text){
   clearInterval(typing);
   const total = text.length;
   let i = 0;
-
   typing = setInterval(()=>{
     typedEl.textContent += text[i] ?? "";
     i++;
     const pct = Math.min(i / total, 1);
     revealByProgress(pct);
-
     if (i >= total){
       clearInterval(typing);
       revealByProgress(1);
     }
   }, 28);
 }
-
 skipBtn.addEventListener("click", ()=>{
   clearInterval(typing);
   typedEl.textContent = LETTER;
   revealByProgress(1);
 });
-
 replayBtn.addEventListener("click", ()=>{
   gallerySec.classList.add("hidden");
   reasonsSec.classList.add("hidden");
   outroSec.classList.add("hidden");
+  if (audioSection) audioSection.classList.add("hidden");
   typeLetter(LETTER);
 });
 
-/* ==== Carousel ==== */
+/* ==== Carousel (fix photo proportions) ==== */
 let idx = 0;
 const imgEl = document.getElementById("carouselImg");
 const capEl = document.getElementById("caption");
@@ -224,7 +215,6 @@ function setupCarousel(){
   show(0);
   document.getElementById("prevBtn").addEventListener("click", ()=> show(idx - 1));
   document.getElementById("nextBtn").addEventListener("click", ()=> show(idx + 1));
-  // swipe on mobile
   let startX = null;
   imgEl.addEventListener("touchstart", e=> startX = e.touches[0].clientX);
   imgEl.addEventListener("touchend", e=>{
@@ -235,17 +225,21 @@ function setupCarousel(){
   });
 }
 
-/* ==== Reasons grid (auto-size) ==== */
+/* ==== Reasons grid (stable sizing) ==== */
 function sizeReasonCards(){
   const flips = document.querySelectorAll("#reasonGrid .flip");
   flips.forEach(f => {
-    const front = f.querySelector(".front");
-    const back  = f.querySelector(".back");
-    const maxH = Math.max(front.scrollHeight, back.scrollHeight) + 28; // padding room
-    f.style.height = maxH + "px";
+    const frontContent = f.querySelector(".front").firstElementChild;
+    const backContent  = f.querySelector(".back").firstElementChild;
+    f.style.height = "auto"; // reset
+    const contentH = Math.max(
+      frontContent ? frontContent.scrollHeight : 0,
+      backContent ? backContent.scrollHeight : 0
+    );
+    const PADDING = 36;
+    f.style.height = (contentH + PADDING) + "px";
   });
 }
-
 function buildReasons(){
   const grid = document.getElementById("reasonGrid");
   grid.innerHTML = "";
@@ -259,25 +253,28 @@ function buildReasons(){
       </div>`;
     grid.appendChild(card);
   });
-  // after layout, size cards to fit content
   requestAnimationFrame(sizeReasonCards);
 }
-// keep sizes correct on viewport changes
-addEventListener("resize", () => requestAnimationFrame(sizeReasonCards));
+let _rzTimer;
+addEventListener("resize", () => {
+  clearTimeout(_rzTimer);
+  _rzTimer = setTimeout(sizeReasonCards, 150);
+});
 
 /* ==== Secret modal ==== */
 secretBtn.addEventListener("click", ()=>{
-  document.getElementById("secretModal").showModal();
+  secretModal.showModal();
   confettiWaves({waves:2, interval:400});
 });
 document.addEventListener("keydown", (e)=>{
   if (e.key === "Escape" && secretModal.open) secretModal.close();
 });
 
-/* ==== Preload remaining images ==== */
+/* ==== Preload images ==== */
 addEventListener("load", ()=>{
   PHOTOS.slice(1).forEach(p=>{
     const img = new Image();
     img.src = p.src;
   });
 });
+
